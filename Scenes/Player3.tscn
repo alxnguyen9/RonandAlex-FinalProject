@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce4uc61msu103"]
+
+[ext_resource type="Script" uid="uid://dfmrasy3jn4p0" path="res://Scripts/Player.gd" id="1_efmv0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dewec"]
+size = Vector2(18, 33)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nfgwa"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"climb",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_efmv0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-9, 16.5)
+shape = SubResource("RectangleShape2D_dewec")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-4, 12)
+sprite_frames = SubResource("SpriteFrames_nfgwa")
+animation = &"idle"

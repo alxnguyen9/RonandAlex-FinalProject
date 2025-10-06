@@ -1,4 +1,4 @@
-# Castle Climbers Parts
+# Castle Climbers 2D Scroller - Project
 The sectional source code for the Castle Climbers game, which is a 2D Platform game made with Godot & GDScript. 
 
 ## Project Overview

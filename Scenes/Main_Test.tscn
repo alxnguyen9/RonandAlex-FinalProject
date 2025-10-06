@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://brlqqpff2admd"]
+[gd_scene load_steps=8 format=3 uid="uid://c4q60rxmn52nq"]
 
 [ext_resource type="Texture2D" uid="uid://1bdvd6pt2ktd" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Terrain (32x32).png" id="1_8o7kg"]
 [ext_resource type="Texture2D" uid="uid://sufk471liay6" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Decorations (32x32).png" id="2_4lky5"]

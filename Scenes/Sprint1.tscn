@@ -1179,4 +1179,4 @@ layer_0/tile_data = PackedInt32Array(2621440, 393216, 16, 2621441, 196608, 19, 2
 layer_1/name = "Decorations"
 
 [node name="Player" parent="." instance=ExtResource("4_tjdc1")]
-position = Vector2(147, 606)
+position = Vector2(146, 608)

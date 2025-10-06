@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://d05m4uohab31b"]
+[gd_scene load_steps=54 format=3 uid="uid://cjqcvvrfqaubg"]
 
 [ext_resource type="Script" uid="uid://dfmrasy3jn4p0" path="res://Scripts/Player.gd" id="1_dn4j3"]
 [ext_resource type="Texture2D" uid="uid://1kw8i7c600wg" path="res://Assets/Kings and Pigs/Sprites/01-King Human/Attack (78x58).png" id="2_30ijx"]
@@ -8,12 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://dohiy8rd7cjxm" path="res://Assets/Kings and Pigs/Sprites/01-King Human/Idle (78x58).png" id="6_30ijx"]
 [ext_resource type="Texture2D" uid="uid://c5j00wy2rk72v" path="res://Assets/Kings and Pigs/Sprites/01-King Human/Run (78x58).png" id="8_w64td"]
 [ext_resource type="Texture2D" uid="uid://dqd5ud37rnsns" path="res://Assets/Kings and Pigs/Sprites/01-King Human/Jump (78x58).png" id="12_uh5gn"]
-[ext_resource type="Script" uid="uid://icbitupx2yx8" path="res://GUI/Health.gd" id="21_vms18"]
 [ext_resource type="Texture2D" uid="uid://daomqyb4fg30b" path="res://Assets/heart/heart/sprite_4.png" id="22_6ohpx"]
 [ext_resource type="FontFile" uid="uid://6t41kx6p1hri" path="res://Assets/Font/QuinqueFive.otf" id="23_30pwa"]
-[ext_resource type="Script" uid="uid://bn7hanf1j8gbl" path="res://GUI/Attack.gd" id="24_ugkmy"]
 [ext_resource type="Texture2D" uid="uid://fd4pmxmcvdbr" path="res://Assets/lightning bolt/lightning bolt/sprite_4.png" id="25_j5n4f"]
-[ext_resource type="Script" uid="uid://bda7epcwua66f" path="res://GUI/Score.gd" id="26_tttff"]
 [ext_resource type="Texture2D" uid="uid://b7m6ri64p6nmp" path="res://Assets/star/star/sprite_04.png" id="27_xdt02"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dewec"]
@@ -299,6 +296,44 @@ _data = {
 &"move_right": SubResource("Animation_megsn")
 }
 
+[sub_resource type="GDScript" id="GDScript_oixfn"]
+script/source = "### Health.gd
+extends ColorRect
+
+#ref to our label node
+@onready var label = $Label
+
+# updates label text when signal is emitted
+func update_lives(lives, max_lives):
+	label.text = str(lives)
+"
+
+[sub_resource type="GDScript" id="GDScript_yp5jh"]
+script/source = "### Attack.gd
+
+extends ColorRect
+
+#ref to our label node
+@onready var label = $Label
+
+# updates label text when signal is emitted
+func update_attack_boost(attack_time_left):
+	label.text = str(attack_time_left)
+"
+
+[sub_resource type="GDScript" id="GDScript_phhv8"]
+script/source = "### Score.gd
+
+extends ColorRect
+
+#ref to our label node
+@onready var label = $Label
+
+# updates label text when signal is emitted
+func update_score(score):
+	label.text = str(score)
+"
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_dn4j3")
 
@@ -330,7 +365,7 @@ offset_top = 20.0
 offset_right = 122.0
 offset_bottom = 60.0
 color = Color(0.17254902, 0.17254902, 0.17254902, 0.40784314)
-script = ExtResource("21_vms18")
+script = SubResource("GDScript_oixfn")
 
 [node name="Sprite2D" type="Sprite2D" parent="UI/Health"]
 position = Vector2(30, 17)
@@ -359,7 +394,7 @@ offset_top = 20.0
 offset_right = 242.0
 offset_bottom = 60.0
 color = Color(0.17254902, 0.17254902, 0.17254902, 0.40784314)
-script = ExtResource("24_ugkmy")
+script = SubResource("GDScript_yp5jh")
 
 [node name="Sprite2D" type="Sprite2D" parent="UI/Attack"]
 position = Vector2(25, 19)
@@ -388,7 +423,7 @@ offset_top = 20.0
 offset_right = 460.0
 offset_bottom = 60.0
 color = Color(0.17254902, 0.17254902, 0.17254902, 0.40784314)
-script = ExtResource("26_tttff")
+script = SubResource("GDScript_phhv8")
 
 [node name="Sprite2D" type="Sprite2D" parent="UI/Score"]
 position = Vector2(25, 17)

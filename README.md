@@ -17,10 +17,6 @@ This game is a Donkey-Kong inspired 2D Platformer that includes the following:
 -	Particle Effects
 -	Complete GUI
 
-## Asset File Download
-All assets can be downloaded from my Google Drive:
-[Required Game Assets](https://drive.google.com/file/d/1vykUcubag43wx7OqTneKxXPITP2nNssc/view?usp=sharing)
-
 ## Asset Credits
 - [Wood Set](https://nyknck.itch.io/wood-set) by NYKNCK (itch.io)
 - [Kings and Pigs](https://pixelfrog-assets.itch.io/kings-and-pigs) by Pixel Frog - itch.io

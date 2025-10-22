@@ -1,0 +1,16 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Godot-specific
+.import/
+.export/
+.export_presets.cfg
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.tmp
+*.bak

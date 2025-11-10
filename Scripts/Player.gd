@@ -31,6 +31,9 @@ var attack_time_left = 0
 #time we started the level
 var level_start_time = Time.get_ticks_msec()
 
+#level value
+@onready var level = get_node_or_null("UI/Level/Value")
+
 func _ready():
 	current_direction = -1
 	#set our attack timer to be the value of our wait_time
@@ -42,10 +45,28 @@ func _ready():
 	update_score.connect($UI/Score.update_score)
 	#show our correct lives value on load
 	$UI/Health/Label.text = str(lives)
+	update_level_label()
 	
 	# Set the level number text
 	var level_num = Global.get_level_number_from_scene_name()
 	$UI/Level/Value.text = str(level_num)
+	
+	# Show instructions only once in Sprint1
+	if level_num == 1 and not Global.has_seen_instructions:
+		Global.has_seen_instructions = true
+		$Instructions.show()
+		set_process(false)
+		get_tree().paused = true
+	else:
+		$Instructions.hide()
+		set_process(true)
+		get_tree().paused = false
+		# Make sure instructions are hidden and game is unpaused
+		level_start_time = Time.get_ticks_msec()
+	
+	#play background music
+	$Music/BackgroundMusic.play()
+		
 
 #Movement and physics
 func _physics_process(delta):
@@ -55,17 +76,17 @@ func _physics_process(delta):
 	horizontal_movement()
 	
 	#applies movement
-	move_and_slide()
+	move_and_slide() 
 	
 	#applies animations
 	if Global.is_climbing == false:
 		player_animations()
-		
-	#countdown for attack boost
+
+	# Attack boost countdown and handling
 	if Global.is_attacking == true:
 		attack_time_left = max(0, attack_time_left - 1)
 		update_attack_boost.emit(attack_time_left)
-		
+
 		if Input.is_action_pressed("ui_attack"):
 			#gets the colliders of our raycast
 			var target = $AttackRayCast.get_collider()
@@ -76,24 +97,23 @@ func _physics_process(delta):
 					Global.disable_spawning()
 					target.queue_free()
 					increase_score(100)
-				#remove bomb
-				if target.name == "Bomb":               
-					Global.is_bomb_moving = false   
+					#remove bomb
+				if target.name == "Bomb":
+					Global.is_bomb_moving = false
 					increase_score(100)
 			Global.can_hurt = false
 		else:
 			Global.can_hurt = true
-	#score boost
-	
+
+	# Score boost
 	if Input.is_action_pressed("ui_jump"):
 		# Get the colliders of our raycast
 		var target = $ScoreRayCast.get_collider()
-
+		
 		# Check if target is valid and player is not damaged
 		if target != null:
 			if target.name == "Box" or target.name == "Bomb":
 				if is_hurt == false:
-					#increase score
 					increase_score(10)
 
 #Horizontal movement
@@ -102,7 +122,7 @@ func horizontal_movement():
 	var horizontal_input = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	# horizontal velocity which moves player left or right based on input
 	velocity.x = horizontal_input * speed
-		#movement and physics
+	
 		
 #Section 2  
 #animations
@@ -112,42 +132,74 @@ func player_animations():
 		$AnimatedSprite2D.flip_h = true
 		$AnimatedSprite2D.play("run")
 		$CollisionShape2D.position.x = 7
+		$ScoreRayCast.position.x = 5
+		
+		$Effects/RunningParticles.emitting = true
+		$Effects/RunningParticles.process_material.gravity = Vector3(10,-2,0)
+		$Effects/RunningParticles.position.x = 5
 	
 	#on right (add is_action_just_released so you continue running after jumping)
 	if Input.is_action_pressed("ui_right") && Global.is_jumping == false: 
 		$AnimatedSprite2D.flip_h = false 
 		$AnimatedSprite2D.play("run")
 		$CollisionShape2D.position.x = -7
+		$ScoreRayCast.position.x = -5
+		
+		$Effects/RunningParticles.emitting = true
+		$Effects/RunningParticles.process_material.gravity = Vector3(-10,-2,0)
+		$Effects/RunningParticles.position.x = -5
 		
 	#on idle if nothing is pressed
 	if !Input.is_anything_pressed():
 		$AnimatedSprite2D.play("idle")
+		$Effects/RunningParticles.emitting = false
 		
 #singular input captures
 func _input(event):
+	#pause game
+	if event.is_action_pressed("ui_pause"):
+		#show menu
+		$PauseMenu.visible = true
+		#pause scene
+		get_tree().paused = true
+		#show cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#play pause menu music
+		$Music/BackgroundMusic.stop()
+		$Music/PauseMenuMusic.play()
+	
 	#on attack 
 	if Input.is_action_just_pressed("ui_attack"):
 		if Global.is_attacking == true:
 			$AnimatedSprite2D.play("attack")
+			$Music/AttackSFX.play()
 		
 	#on jump
 	if event.is_action_pressed("ui_jump") and is_on_floor():
 		velocity.y = jump_height
 		$AnimatedSprite2D.play("jump")
+		#sfx
+		$Music/JumpSFX.play()
+		$Effects/RunningParticles.emitting = true
 		
-	#on climbing ladders
+			#on climbing ladders
 	if Global.is_climbing == true:
+		if !Input.is_anything_pressed():
+			$AnimatedSprite2D.play("idle")
+			$Effects/RunningParticles.emitting = false
 		if Input.is_action_pressed("ui_up"):
-			$AnimatedSprite2D.play("climb") 
+			$AnimatedSprite2D.play("climb")
 			gravity = 100
 			velocity.y = -160
 			Global.is_jumping = true
-
+			$Music/JumpSFX.play()
+			
 	#reset gravity
 	else:
 		gravity = 200
-		Global.is_climbing = false
+		Global.is_climbing = false	
 		Global.is_jumping = false
+
 
 func _on_animated_sprite_2d_animation_finished():
 	if attack_time_left <= 0:
@@ -170,9 +222,14 @@ func _on_animated_sprite_2d_animation_finished():
 		$GameOver/Menu/Container/TimeCompleted/Value.text = str(Global.final_time)
 		$GameOver/Menu/Container/Score/Value.text = str(Global.final_score)
 		$GameOver/Menu/Container/Ranking/Value.text = str(Global.final_rating)
+		#show cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#play game over music
+		$Music/BackgroundMusic.stop()
+		$Music/GameOverMusic.play() 
 	
 	
-func _process(delta):
+func _process(_delta):
 	if velocity.x > 0: # Moving right
 		current_direction = 1
 	elif velocity.x < 0: # Moving left
@@ -198,8 +255,15 @@ func _process(delta):
 			# Update the last_direction variable
 		last_direction = current_direction
 		
-	#Update the time label
-	update_time_label()
+	if get_tree().paused == true:
+		#show cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) 
+	elif get_tree().paused == false:
+		#hide cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN) 
+		
+		# Update the time label
+		update_time_label()
 
 	
 	
@@ -208,7 +272,7 @@ func take_damage():
 	#deduct and update lives    
 	if lives > 0 and Global.can_hurt == true:
 		lives = lives - 1
-		update_lives.emit(lives, max_lives)
+		update_lives.emit(lives)
 		#play damage animation
 		$AnimatedSprite2D.play("damage")
 		#allows animation to play
@@ -216,6 +280,7 @@ func take_damage():
 		is_hurt = true
 		#decrease score
 		decrease_score(50)
+		$Music/DamageSFX.play()
 		
 	if lives <= 0:
 		$AnimatedSprite2D.play("death")
@@ -226,15 +291,18 @@ func add_pickup(pickup):
 	if pickup == Global.Pickups.HEALTH:
 		if lives < max_lives:
 			lives += 1
-			update_lives.emit(lives, max_lives)
+			update_lives.emit(lives)
+		$Music/HealthSFX.play()
 		
 	#temporarily allows us to destroy boxes/bombs
 	if pickup == Global.Pickups.ATTACK:
 		Global.is_attacking = true
+		$Music/BoostSFX.play()
 		
 	#increases our player's score
 	if pickup == Global.Pickups.SCORE:
 		increase_score(1000)
+		$Music/ScoreSFX.play()
 	
 		
 		
@@ -249,6 +317,7 @@ func _on_attack_boost_timer_timeout():
 func increase_score(score_count):
 	score += score_count
 	update_score.emit(score)
+	$Music/IncreaseScoreSFX.play()
 
 #decreases our score
 func decrease_score(score_count):
@@ -264,9 +333,9 @@ func final_score_time_and_rating():
 	# Rating based on time and score
 	var rating = ""
 	
-	if time_taken <= 60 and score >= 5000:
+	if time_taken <= 60 and score >= 10000:
 		rating = "Master" # Exceptionally high score and fast completion
-	elif time_taken <= 120 and score >= 4000:
+	elif time_taken <= 120 and score >= 5000:
 		rating = "Pro" # Very high score and fast completion
 	elif time_taken <= 180 and score >= 3000:
 		rating = "Expert" # High score and moderately fast completion
@@ -286,13 +355,66 @@ func final_score_time_and_rating():
 func update_time_label():
 	var time_passed = (Time.get_ticks_msec() - level_start_time) / 1000.0 # in seconds
 	$UI/Time/Label.text = str(round(time_passed)) + "s"
-
+	
+# Update the level label to display the current level
+func update_level_label():
+	var current_level = Global.get_level_number_from_scene_name()
+	if current_level != -1:
+		level.text = " " + str(current_level)
+	else:
+		level.text = "err!"
 
 #restarts game
 func _on_restart_button_pressed():
-	#unpause scene
-	get_tree().paused = false
 	#hide menu
 	$GameOver/Menu.visible = false
 	# Restart current scene
 	get_tree().reload_current_scene()
+
+
+#resume game
+func _on_button_resume_pressed():
+	#unpause scene
+	get_tree().paused = false
+	#hide menu
+	$PauseMenu.visible = false
+	#stop pause menu music
+	$Music/BackgroundMusic.play()
+	$Music/PauseMenuMusic.stop()
+	
+#quit to main menu  
+func _on_button_quit_pressed():
+	# Unpause the game
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+
+#load game
+func _on_button_load_pressed():
+	# Get the current scene 
+	var current_scene = get_tree().current_scene
+	# Free the current scene if it exists
+	if current_scene:
+		current_scene.queue_free()
+	# Load game
+	Global.load_game()
+	#unpause game
+	if Global.get_level_number_from_scene_name() > 1:
+		#Don't show instructions
+		Global.has_seen_instructions = true 
+		get_tree().paused = false
+	else:
+		#Shows instruction for sprint1
+		Global.has_seen_instructions = false
+		get_tree().paused = true
+	
+#saves game
+func _on_button_save_pressed():
+	Global.save_game()
+#hides popup
+func _on_accept_button_pressed():
+	#hide popup
+	$Instructions.hide()
+	#unpause game
+	get_tree().paused = false
+	set_process(true)
+	level_start_time = Time.get_ticks_msec()

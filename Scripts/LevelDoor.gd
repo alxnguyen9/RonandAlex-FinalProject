@@ -11,6 +11,7 @@ func _ready():
 	
 func _on_body_entered(body):
 	if body.name == "Player":
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) 
 		# pause game
 		get_tree().paused = true
 		# show menu
@@ -24,7 +25,10 @@ func _on_body_entered(body):
 		# show player values
 		$UI/Menu/Container/TimeCompleted/Value.text = str(Global.final_time)
 		$UI/Menu/Container/Score/Value.text = str(Global.final_score)
-		$UI/Menu/Container/Ranking/Value.text = str(Global.final_rating)
+		$UI/Menu/Container/Ranking/Value.text = str(Global.final_rating)        #show cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#play music
+		$Music/LevelUpMusic.play()
 
 func _on_continue_button_pressed():
 	#unpause scene
@@ -40,8 +44,9 @@ func _on_continue_button_pressed():
 
 
 func _on_restart_button_pressed():
-	#unpause scene
-	get_tree().paused = false
+	if Global.get_level_number_from_scene_name() > 1:
+		#unpause scene
+		get_tree().paused = false
 	#hide menu
 	$UI/Menu.visible = false
 	# Restart current scene

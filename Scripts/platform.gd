@@ -19,6 +19,29 @@ var progress = 0.0
 @export  var wait_time_at_top = 2.0 # Time in seconds to wait at top
 @export var wait_time_at_bottom = 2.0 # Time in seconds to wait at top
 
+#sets platforms y position on game start and switches the state
+func _ready():
+	initial_position = position.y
+	switch_state(State.MOVING_UP)
+	
+func _physics_process(delta):
+	match current_state:
+	   #if its moving up
+		State.MOVING_UP:
+			progress += delta
+		   #change its position
+			position.y = lerp(initial_position, initial_position - movement_range, progress / (movement_range / movement_range))
+			if progress >= (movement_range / movement_speed):
+				switch_state(State.WAIT_AT_TOP)
+
+		#if its moving down
+		State.MOVING_DOWN:
+			progress -= delta
+			#change its position
+			position.y = lerp(initial_position, initial_position - movement_range, progress / (movement_range / movement_speed))
+			if progress <= 0:
+				switch_state(State.WAIT_AT_BOTTOM)
+
 #platform direction changes on timer timeout      
 func _on_timer_timeout():
 	if current_state == State.WAIT_AT_TOP:
@@ -27,10 +50,6 @@ func _on_timer_timeout():
 	if current_state == State.WAIT_AT_BOTTOM:
 		switch_state(State.MOVING_UP)
 		
-#sets platforms y position on game start and switches the state
-func _ready():
-	initial_position = position.y
-	switch_state(State.MOVING_UP)
 	
 #changes the platforms movement states
 func switch_state(new_state):
@@ -55,21 +74,3 @@ func switch_state(new_state):
 		State.MOVING_DOWN:
 			progress = movement_range / movement_speed
 			
-#moves our platform
-func _physics_process(delta):
-	match current_state:
-	   #if its moving up
-		State.MOVING_UP:
-			progress += delta
-		   #change its position
-			position.y = lerp(initial_position, initial_position - movement_range, progress / (movement_range / movement_range))
-			if progress >= (movement_range / movement_speed):
-				switch_state(State.WAIT_AT_TOP)
-
-		#if its moving down
-		State.MOVING_DOWN:
-			progress -= delta
-			#change its position
-			position.y = lerp(initial_position, initial_position - movement_range, progress / (movement_range / movement_speed))
-			if progress <= 0:
-				switch_state(State.WAIT_AT_BOTTOM)

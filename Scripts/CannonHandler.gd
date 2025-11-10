@@ -12,17 +12,16 @@ func _process(delta):
 	#randomized speech bubble randomize times
 	$Timer.wait_time = randi_range(1,10)
 	
-	#idle animation
-	if Global.is_bomb_moving == true:
-		$Body.play("idle")
-		#show speech bubble
-		$SpeechBubble.visible = true
 	#matching animation 
 	if Global.is_bomb_moving == false:
 		$Body.play("matching")
 		#hide speech bubble
 		$SpeechBubble.visible = false
-		
+	#idle animation
+	if Global.is_bomb_moving == true:
+		$Body.play("idle")
+		#show speech bubble
+		$SpeechBubble.visible = true
 		
 func _on_timer_timeout():
 	#randomizes speech

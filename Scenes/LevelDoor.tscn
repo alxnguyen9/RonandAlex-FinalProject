@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c5wq5v4f1u5oe"]
+[gd_scene load_steps=37 format=3 uid="uid://c5wq5v4f1u5oe"]
 
 [ext_resource type="Texture2D" uid="uid://bll5xyyku7qqn" path="res://Assets/Kings and Pigs/Sprites/11-Door/Idle.png" id="1_eaoqf"]
 [ext_resource type="Script" uid="uid://bybbknvn4pcad" path="res://Scripts/LevelDoor.gd" id="1_nju71"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c7mayntkxp8ex" path="res://Tilesets/oppcastle-mod-tiles.png" id="4_7mdtr"]
 [ext_resource type="Texture2D" uid="uid://di3ywju7v02i2" path="res://Assets/Kings and Pigs/Sprites/04-Pig Throwing a Box/Idle (26x30).png" id="5_7mdtr"]
 [ext_resource type="Texture2D" uid="uid://dohiy8rd7cjxm" path="res://Assets/Kings and Pigs/Sprites/01-King Human/Idle (78x58).png" id="6_7mdtr"]
+[ext_resource type="AudioStream" uid="uid://6utfmu6cynvo" path="res://Assets/Music/Retro Sounds/audio effects retro/Extras/idk/cool pigeon.wav" id="8_fek66"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o2ff8"]
 size = Vector2(59, 56)
@@ -899,6 +900,11 @@ autoplay = "default"
 libraries = {
 &"": SubResource("AnimationLibrary_dop7c")
 }
+
+[node name="Music" type="Node2D" parent="."]
+
+[node name="LevelUpMusic" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource("8_fek66")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="pressed" from="UI/Menu/Container/ContinueButton" to="." method="_on_continue_button_pressed"]

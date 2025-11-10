@@ -14,6 +14,8 @@ func _on_body_entered(body):
 		#deal damage
 		if Global.can_hurt == true:
 			body.take_damage()
+			Global.is_climbing = false
+			Global.is_jumping = false
 		
 	# If the box collides with our Wall scene, remove so that it can respawn
 	if body.name.begins_with("Wall"):

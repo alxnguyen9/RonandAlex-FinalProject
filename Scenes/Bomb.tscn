@@ -1,8 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://dvm64fihtky77"]
+[gd_scene load_steps=18 format=3 uid="uid://dvm64fihtky77"]
 
 [ext_resource type="Script" uid="uid://bfgiw1ypex8p0" path="res://Scripts/Bomb.gd" id="1_luf1c"]
 [ext_resource type="Texture2D" uid="uid://bmi3x00qiohuv" path="res://Assets/Kings and Pigs/Sprites/09-Bomb/Boooooom (52x56).png" id="2_4pshg"]
+[ext_resource type="Texture2D" uid="uid://d0ecnuuteangn" path="res://Assets/Particles/7/1_14.png" id="2_iiucn"]
 [ext_resource type="Texture2D" uid="uid://ccha35pmbi78h" path="res://Assets/Kings and Pigs/Sprites/09-Bomb/Bomb On (52x56).png" id="3_iiucn"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bugvj"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+gravity = Vector3(0, 0, 0)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sc42d"]
 atlas = ExtResource("2_4pshg")
@@ -93,9 +100,19 @@ radius = 7.0
 [node name="Bomb" type="Area2D"]
 script = ExtResource("1_luf1c")
 
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="FireParticle" type="GPUParticles2D" parent="Node2D"]
+position = Vector2(0, 3)
+amount = 3
+texture = ExtResource("2_iiucn")
+speed_scale = 10.0
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_bugvj")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_bugvj")
-animation = &"moving"
+animation = &"explode"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 4.5)

@@ -16,9 +16,11 @@ func _on_body_entered(body):
 		#deal damage
 		if Global.can_hurt == true:
 			body.take_damage()
+			Global.is_climbing = false
+			Global.is_jumping = false
 		
 	#if the bomb collides with Level tilemap, (floor and walls)
-	if body.name == "Level" and !body.name.begins_with("Platform"):
+	if body.name == "Level":
 		$AnimatedSprite2D.play("explode")
 		$Timer.start()
 		Global.is_bomb_moving = false

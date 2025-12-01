@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ddd0uie4a2uof"]
+[gd_scene load_steps=19 format=3 uid="uid://ddd0uie4a2uof"]
 
 [ext_resource type="Texture2D" uid="uid://1bdvd6pt2ktd" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Terrain (32x32).png" id="1_8k0v8"]
 [ext_resource type="Texture2D" uid="uid://sufk471liay6" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Decorations (32x32).png" id="2_lc0y4"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dktuctkcg0y2l" path="res://Scenes/Player.tscn" id="4_tjdc1"]
 [ext_resource type="PackedScene" uid="uid://opoptg1d655o" path="res://Scenes/BombSpawner.tscn" id="5_tjdc1"]
 [ext_resource type="PackedScene" uid="uid://c5wq5v4f1u5oe" path="res://Scenes/LevelDoor.tscn" id="5_yhsfa"]
+[ext_resource type="PackedScene" uid="uid://hylwaqwcueya" path="res://Scenes/Wall.tscn" id="6_jgc0y"]
 [ext_resource type="PackedScene" uid="uid://b3788qtkkde4h" path="res://Scenes/Pickup.tscn" id="6_ptkgq"]
 [ext_resource type="PackedScene" uid="uid://brlqqpff2admd" path="res://Scenes/Sprint2.tscn" id="6_tjdc1"]
 
@@ -1213,7 +1214,7 @@ position = Vector2(240, 384)
 scale = Vector2(1, 0.75)
 
 [node name="Ladder8" parent="Ladders" instance=ExtResource("3_yhsfa")]
-position = Vector2(29, 480)
+position = Vector2(34, 482)
 scale = Vector2(1, 0.75)
 
 [node name="Ladder9" parent="Ladders" instance=ExtResource("3_yhsfa")]
@@ -1233,6 +1234,15 @@ layer_1/name = "Decorations"
 
 [node name="Player" parent="." instance=ExtResource("4_tjdc1")]
 position = Vector2(79, 609)
+
+[node name="Walls" type="Node2D" parent="."]
+position = Vector2(1147, -3)
+scale = Vector2(2.10169, 1.62805)
+
+[node name="Wall" parent="Walls" instance=ExtResource("6_jgc0y")]
+position = Vector2(-547.656, -4.29963)
+
+[node name="Wall2" parent="Walls" instance=ExtResource("6_jgc0y")]
 
 [node name="BombPath" type="Node2D" parent="."]
 

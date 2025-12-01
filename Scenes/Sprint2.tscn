@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://brlqqpff2admd"]
+[gd_scene load_steps=24 format=3 uid="uid://brlqqpff2admd"]
 
 [ext_resource type="Texture2D" uid="uid://1bdvd6pt2ktd" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Terrain (32x32).png" id="1_pb7nv"]
 [ext_resource type="Texture2D" uid="uid://sufk471liay6" path="res://Assets/Kings and Pigs/Sprites/14-TileSets/Decorations (32x32).png" id="2_v6b4d"]
@@ -8,10 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://bxwlr34ybpeoq" path="res://Scenes/Ladder.tscn" id="5_e3h4h"]
 [ext_resource type="PackedScene" uid="uid://dktuctkcg0y2l" path="res://Scenes/Player.tscn" id="6_iesij"]
 [ext_resource type="PackedScene" uid="uid://opoptg1d655o" path="res://Scenes/BombSpawner.tscn" id="7_178qx"]
+[ext_resource type="PackedScene" uid="uid://hylwaqwcueya" path="res://Scenes/Wall.tscn" id="8_l877c"]
 [ext_resource type="PackedScene" uid="uid://de1xat2lrv41q" path="res://Scenes/BoxSpawner.tscn" id="8_m0dtr"]
 [ext_resource type="PackedScene" uid="uid://b3788qtkkde4h" path="res://Scenes/Pickup.tscn" id="9_x3lk0"]
 [ext_resource type="PackedScene" uid="uid://c5wq5v4f1u5oe" path="res://Scenes/LevelDoor.tscn" id="10_45y84"]
-[ext_resource type="PackedScene" uid="uid://c4mmiupw2hfp2" path="res://Scenes/Sprint3.tscn" id="11_v6b4d"]
+[ext_resource type="PackedScene" uid="uid://cnv2ti3xmdtgy" path="res://Scenes/Sprint3.tscn" id="11_v6b4d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sxmtm"]
 texture = ExtResource("1_pb7nv")
@@ -3590,6 +3591,15 @@ layer_1/tile_data = PackedInt32Array(2359313, 524295, 16, 2424849, 524295, 17, 2
 
 [node name="Player" parent="." instance=ExtResource("6_iesij")]
 position = Vector2(126, 608)
+
+[node name="Walls" type="Node2D" parent="."]
+position = Vector2(1147, -3)
+scale = Vector2(2.10169, 1.62805)
+
+[node name="Wall" parent="Walls" instance=ExtResource("8_l877c")]
+position = Vector2(-547.656, -4.29963)
+
+[node name="Wall2" parent="Walls" instance=ExtResource("8_l877c")]
 
 [node name="BombPath" type="Node2D" parent="."]
 

@@ -2200,6 +2200,26 @@ theme_override_fonts/font = ExtResource("23_30pwa")
 theme_override_font_sizes/font_size = 35
 text = "Pause Menu"
 
+[node name="SaveDialog" type="Popup" parent="PauseMenu/Menu/Container"]
+oversampling_override = 1.0
+title = "Game Saved!"
+position = Vector2i(526, 550)
+size = Vector2i(102, 28)
+
+[node name="Label" type="Label" parent="PauseMenu/Menu/Container/SaveDialog"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49.5
+offset_top = -11.5
+offset_right = 49.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game saved!"
+
 [node name="ButtonResume" type="Button" parent="PauseMenu/Menu/Container"]
 layout_mode = 0
 offset_left = 285.0

@@ -114,7 +114,7 @@ func _physics_process(delta):
 		if target != null:
 			if target.name == "Box" or target.name == "Bomb":
 				if is_hurt == false:
-					increase_score(10)
+					increase_score(30)
 
 #Horizontal movement
 func horizontal_movement():
@@ -391,7 +391,7 @@ func _on_button_quit_pressed():
 #load game
 func _on_button_load_pressed():
 	# Get the current scene 
-	var current_scene = get_tree().current_scene
+	var current_scene = get_tree().root.get_tree().current_scene
 	# Free the current scene if it exists
 	if current_scene:
 		current_scene.queue_free()
@@ -410,6 +410,12 @@ func _on_button_load_pressed():
 #saves game
 func _on_button_save_pressed():
 	Global.save_game()
+	show_save_notification()
+	
+func show_save_notification():
+	var save_dialog = get_node("PauseMenu/Menu/Container/SaveDialog")
+	save_dialog.popup()
+	
 #hides popup
 func _on_accept_button_pressed():
 	#hide popup

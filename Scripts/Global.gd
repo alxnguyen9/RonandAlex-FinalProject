@@ -119,6 +119,7 @@ func load_game():
 		clean_scene_name(current_scene_name)
 		#notify
 		print("Loading game.")
+		return new_scene
 	else:
 		print("An error occurred while loading the game")
-		
+		return null
